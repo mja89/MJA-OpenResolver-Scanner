@@ -29,18 +29,28 @@ async def main():
     print("=" * 70)
     
     try:
-        # اجرای اسکن برای هر target
+        async def update_dashboard():
+            while scanner.is_running:
+                await scanner.display_dashboard()
+                await asyncio.sleep(2)
+        
+        dashboard_task = asyncio.create_task(update_dashboard())
+        
         for target in scanner.config.get('targets', []):
             if not scanner.is_running:
                 break
             await scanner.scan_network(target)
+        
+        dashboard_task.cancel()
+        try:
+            await dashboard_task
+        except asyncio.CancelledError:
+            pass
             
     except KeyboardInterrupt:
         scanner.safe_stop(None, None)
     except Exception as e:
         print(f"\n❌ Error: {e}")
-        import traceback
-        traceback.print_exc()
         scanner.save_state()
     
     finally:
