@@ -2,6 +2,7 @@
 
 # MJA OpenResolver Scanner Installer
 
+
 echo "🚀 MJA OpenResolver Scanner - Installation"
 echo "========================================"
 
