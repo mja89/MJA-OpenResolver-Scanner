@@ -186,7 +186,6 @@ chmod +x install.sh run.py
 ./install.sh
 ```
 
-```
 
 ## 🛡️ نکات امنیتی
 
