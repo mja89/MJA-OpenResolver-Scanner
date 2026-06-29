@@ -12,7 +12,6 @@ import ipaddress
 import json
 import random
 import time
-import psutil
 import os
 import sys
 import signal
@@ -23,7 +22,7 @@ from dataclasses import dataclass, asdict
 from collections import deque
 import logging
 
-# Setup logging
+# تنظیمات لاگ
 logging.basicConfig(
     filename='scan.log',
     level=logging.INFO,
@@ -55,7 +54,7 @@ class MJAScanner:
         self.total_ips_to_scan = 0
         self.targets_processed = 0
         
-        # Adaptive variables
+        # Adaptive variables (simplified)
         self.current_workers = self.config.get('initial_workers', 100)
         self.current_timeout = self.config.get('initial_timeout', 3.0)
         self.cpu_threshold = self.config.get('cpu_threshold', 70)
@@ -382,26 +381,8 @@ class MJAScanner:
             return await self.scan_target(ip)
 
     def adjust_workers(self) -> int:
-        """Adaptive worker adjustment based on system load"""
-        try:
-            cpu_percent = psutil.cpu_percent(interval=0.1)
-            memory_percent = psutil.virtual_memory().percent
-            
-            # Reduce workers if CPU or memory is high
-            if cpu_percent > self.cpu_threshold or memory_percent > self.ram_limit:
-                self.current_workers = max(
-                    self.config.get('min_workers', 20),
-                    self.current_workers - 10
-                )
-            else:
-                # Increase workers if system has capacity
-                self.current_workers = min(
-                    self.config.get('max_workers', 500),
-                    self.current_workers + 5
-                )
-        except:
-            pass  # Use default if psutil fails
-        
+        """Adaptive worker adjustment (simplified for Android compatibility)"""
+        # غیرفعال برای سازگاری با اندروید
         return self.current_workers
 
     def update_stats(self):
@@ -541,17 +522,11 @@ class MJAScanner:
 
     def get_cpu_usage(self) -> str:
         """Get CPU usage"""
-        try:
-            return f"{psutil.cpu_percent():.1f}"
-        except:
-            return "N/A"
+        return "N/A"
 
     def get_ram_usage(self) -> str:
         """Get RAM usage"""
-        try:
-            return f"{psutil.virtual_memory().percent:.1f}"
-        except:
-            return "N/A"
+        return "N/A"
 
     def format_time(self, seconds: float) -> str:
         """Format time in HH:MM:SS"""
@@ -563,4 +538,8 @@ class MJAScanner:
         return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
     def calculate_remaining(self) -> float:
-        "
+        """Estimate remaining time"""
+        if self.stats['speed'] > 0:
+            remaining_ips = self.total_ips_to_scan - self.stats['scanned']
+            return remaining_ips / self.stats['speed']
+        return 0
