@@ -2,6 +2,7 @@
 
 # MJA OpenResolver Scanner Installer
 
+
 echo "🚀 MJA OpenResolver Scanner - Installation"
 echo "========================================"
 
@@ -13,12 +14,12 @@ fi
 
 echo "✅ Python detected"
 
-# ایجاد فایل‌های مورد نیاز
+# Create necessary files
 echo "📁 Creating required files..."
 touch client_resolvers.txt
 touch scan.log
 
-# تنظیم مجوز اجرا
+# Set permissions
 chmod +x run.py
 
 echo ""
