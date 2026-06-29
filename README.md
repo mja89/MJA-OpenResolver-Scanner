@@ -126,6 +126,67 @@ python3 run.py
 ==========================================================
 ```
 
+## 🔧 عیب‌یابی
+
+### خطای "unexpected EOF" در install.sh
+
+اگر با خطای زیر مواجه شدید:
+```
+
+./install.sh: line 3: unexpected EOF while looking for matching
+
+```
+
+**راه حل:** 
+1. فایل install.sh را با یک ویرایشگر متن باز کنید
+2. مطمئن شوید محتوا کامل است
+3. یا از روش نصب دستی استفاده کنید:
+```bash
+pip3 install -r requirements.txt
+touch client_resolvers.txt scan.log
+chmod +x run.py
+python3 run.py
+```
+
+خطای "pip3 not found"
+
+
+# در Termux
+```bash
+pkg install python-pip
+```
+
+# در Ubuntu/Debian
+```bash
+sudo apt install python3-pip
+```
+
+# در CentOS/RHEL
+```bash
+sudo yum install python3-pip
+```
+
+خطای "bc: command not found"
+
+# در Termux
+```bash
+pkg install bc
+```
+
+# در Ubuntu/Debian
+```bash
+sudo apt install bc
+```
+
+خطای Permission denied
+
+```bash
+chmod +x install.sh run.py
+./install.sh
+```
+
+```
+
 ## 🛡️ نکات امنیتی
 
 - این ابزار فقط برای **تست امنیتی**2 و **تحقیقاتی** طراحی شده است
