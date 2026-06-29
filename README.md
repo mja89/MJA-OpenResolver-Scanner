@@ -1,10 +1,10 @@
 # 🚀 MJA OpenResolver Scanner
 
-
-**سریع‌ترین و هوشمندترین اسکنر Open DNS Resolver**
+**سریع‌ترین و هوشمندترین اسکنر Open DNS Resolver - بدون نیاز به کتابخانه**
 
 [![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20Android-orange)](https://github.com)
 
 ## ✨ ویژگی‌ها
 
@@ -18,12 +18,13 @@
 - 📈 **Scoring System** - امتیازدهی خودکار به رزولورها
 - 📁 **CSV Report** - گزارش کامل با تمام جزئیات
 - 🔒 **Safe Stop** - توقف امن با ذخیره وضعیت
+- **✅ بدون نیاز به هیچ کتابخانه خارجی** - فقط Python خالص
 
 ## 📦 نصب
 
 ### روش ۱: نصب خودکار (پیشنهادی)
 
-#### برای Linux / macOS / Termux:
+#### برای Linux / macOS / Termux (اندروید):
 ```bash
 git clone https://github.com/mja89/MJA-OpenResolver-Scanner.git
 cd MJA-OpenResolver-Scanner
@@ -40,20 +41,19 @@ install.bat
 
 ### روش ۲: نصب دستی
 
-#### مرحله ۱: کلون کردن پروژه
 ```bash
+# 1. Clone کردن پروژه
 git clone https://github.com/mja89/MJA-OpenResolver-Scanner.git
 cd MJA-OpenResolver-Scanner
-```
 
-#### مرحله ۲: نصب پیش‌نیازها
-```bash
-pip3 install -r requirements.txt
-```
+# 2. ایجاد فایل‌های مورد نیاز
+touch client_resolvers.txt scan.log   # Linux/macOS/Termux
+# یا در ویندوز:
+type nul > client_resolvers.txt
+type nul > scan.log
 
-#### مرحله ۳: ایجاد فایل‌های مورد نیاز
-```bash
-touch client_resolvers.txt scan.log
+# 3. اجرا
+python3 run.py   # یا python run.py در ویندوز
 ```
 
 ## 🚀 اجرا
@@ -81,117 +81,127 @@ python3 run.py
   "initial_timeout": 3.0,
   "min_timeout": 1.0,
   "max_timeout": 10.0,
+  "batch_size": 1000,
+  "save_interval": 60,
   "smart_sampling": true,
   "random_scan": true,
-  "batch_size": 1000,
-  "save_interval": 60
+  "dns_query": "google.com"
 }
 ```
+
+### توضیحات تنظیمات:
+
+| پارامتر | توضیحات | مقدار پیش‌فرض |
+|---------|---------|---------------|
+| `profile` | حالت عملکرد: battery, balanced, turbo | balanced |
+| `targets` | لیست آی‌پی‌ها یا رنج‌های مورد نظر | ["8.8.8.8"] |
+| `initial_workers` | تعداد کارگرهای اولیه | 100 |
+| `min_workers` | حداقل کارگرها | 20 |
+| `max_workers` | حداکثر کارگرها | 500 |
+| `initial_timeout` | تایم‌اوت اولیه (ثانیه) | 3.0 |
+| `batch_size` | تعداد IP در هر دسته | 1000 |
+| `smart_sampling` | فعال/غیرفعال کردن نمونه‌گیری هوشمند | true |
+| `random_scan` | فعال/غیرفعال کردن اسکن تصادفی | true |
 
 ## 🎮 حالت‌های عملکرد
 
 | حالت | کارگرها | تایم‌اوت | مناسب برای |
 |------|---------|----------|------------|
-| 🔋 Battery | 50 | 3.0s | گوشی موبایل |
+| 🔋 Battery | 50 | 3.0s | گوشی موبایل، تبلت |
 | ⚖️ Balanced | 100 | 2.0s | استفاده روزمره |
-| 🚀 Turbo | 300 | 1.0s | سرورهای قوی |
+| 🚀 Turbo | 300 | 1.0s | سرورهای قوی، VPS |
 
 ## 📁 خروجی‌ها
 
+پس از اجرا، فایل‌های زیر ایجاد می‌شوند:
+
 | فایل | توضیحات |
 |------|----------|
-| `client_resolvers.txt` | لیست رزولورهای پیدا شده |
-| `scan_report.csv` | گزارش کامل با جزئیات |
-| `scan.log` | لاگ کامل عملیات |
-| `state.json` | وضعیت برای ادامه اسکن |
+| `client_resolvers.txt` | لیست رزولورهای پیدا شده (IP:Port) |
+| `scan_report.csv` | گزارش کامل با IP، latency، loss، score |
+| `scan.log` | لاگ کامل تمام عملیات |
+| `state.json` | وضعیت اسکن برای ادامه از نقطه قطع |
 
 ## 📊 مثال خروجی
 
+### داشبورد در حین اسکن:
 ```
-==========================================================
-  🚀 MJA OpenResolver Scanner v1.0
-==========================================================
-  Platform: Linux
+======================================================================
+  🚀 MJA OpenResolver Scanner v1.0 (Socket Edition)
+======================================================================
+  Platform: Android (Termux)
   Profile: Balanced
   Workers: 100
-  CPU: 45.2%
-  RAM: 38.7%
-──────────────────────────────────────────────────────────
+──────────────────────────────────────────────────────────────────────
   Scanned: 1,234,567
   Healthy: 89,234 🟢
   Dead: 1,145,333 🔴
-──────────────────────────────────────────────────────────
+──────────────────────────────────────────────────────────────────────
   Speed: 1,234.56 IPs/sec
   Elapsed: 00:16:40
   Remaining: 02:30:15
-==========================================================
+======================================================================
+  Press Ctrl+C to stop safely
 ```
+
+### فایل client_resolvers.txt:
+```
+8.8.8.8:53
+1.1.1.1:53
+94.140.14.14:53
+45.33.22.11:53
+```
+
+### فایل scan_report.csv:
+```csv
+IP,Port,Latency,Loss,Score,Alive,Timestamp
+8.8.8.8,53,12.5,0,98.6,True,2026-06-29T10:30:15
+1.1.1.1,53,15.2,0,97.4,True,2026-06-29T10:30:16
+```
+
+## ⌨️ میانبرهای کیبورد
+
+| کلید | عملکرد |
+|------|--------|
+| `Ctrl+C` | توقف امن و ذخیره وضعیت |
 
 ## 🔧 عیب‌یابی
 
-### خطای "unexpected EOF" در install.sh
+### خطای "Python not found"
+- Python 3.7+ را از [python.org](https://python.org) نصب کنید
+- در Termux: `pkg install python`
 
-اگر با خطای زیر مواجه شدید:
-```
-
-./install.sh: line 3: unexpected EOF while looking for matching
-
-```
-
-**راه حل:** 
-1. فایل install.sh را با یک ویرایشگر متن باز کنید
-2. مطمئن شوید محتوا کامل است
-3. یا از روش نصب دستی استفاده کنید:
+### خطای "Permission denied"
 ```bash
-pip3 install -r requirements.txt
-touch client_resolvers.txt scan.log
-chmod +x run.py
-python3 run.py
-```
-
-خطای "pip3 not found"
-
-
-# در Termux
-```bash
-pkg install python-pip
-```
-
-# در Ubuntu/Debian
-```bash
-sudo apt install python3-pip
-```
-
-# در CentOS/RHEL
-```bash
-sudo yum install python3-pip
-```
-
-خطای "bc: command not found"
-
-# در Termux
-```bash
-pkg install bc
-```
-
-# در Ubuntu/Debian
-```bash
-sudo apt install bc
-```
-
-خطای Permission denied
-
-```bash
-chmod +x install.sh run.py
+chmod +x run.py install.sh
 ./install.sh
 ```
 
+### خطای "No module named 'aiodns'"
+**نیازی نیست!** این نسخه بدون هیچ کتابخانه خارجی کار می‌کند.
+
+### برنامه هنگ کرد؟
+اجازه دهید چند دقیقه کار کند. اگر واقعاً هنگ کرد، `Ctrl+C` بزنید و دوباره اجرا کنید (ادامه می‌دهد).
 
 ## 🛡️ نکات امنیتی
 
-- این ابزار فقط برای **تست امنیتی**2 و **تحقیقاتی** طراحی شده است
+- این ابزار فقط برای **تست امنیتی** و **تحقیقاتی** طراحی شده است
 - استفاده از آن برای اسکن بدون اجازه ممکن است غیرقانونی باشد
 - لطفاً مسئولانه و با رعایت قوانین استفاده کنید
+
+## ❓ سوالات متداول
+
+**س: آیا نیاز به نصب کتابخانه خاصی دارم؟**
+ج: خیر! این پروژه با Python خالص نوشته شده و هیچ کتابخانه خارجی نیاز ندارد.
+
+**س: در Termux کار می‌کند؟**
+ج: بله! کاملاً سازگار است.
+
+**س: چه سرعتی دارد؟**
+ج: با تنظیمات پیش‌فرض، حدود ۱۰۰۰ تا ۵۰۰۰ IP در ثانیه (بستگی به اینترنت و سخت‌افزار دارد).
+
+**س: چقدر حافظه مصرف می‌کند؟**
+ج: بسیار کم! حتی برای میلیون‌ها IP کمتر از ۱۰۰ مگابایت.
 
 ## 🤝 مشارکت در توسعه
 
@@ -203,7 +213,12 @@ chmod +x install.sh run.py
 
 این پروژه تحت مجوز **MIT** منتشر شده است.
 
+## 📞 ارتباط با ما
+
+- GitHub Issues: [Create Issue](https://github.com/mja89/MJA-OpenResolver-Scanner/issues)
+
 ---
 
-**ساخته شده با ❤️ توسط M.J.Ahmadi**
-w
+**⭐ اگر پروژه را مفید دیدید، به ما ستاره دهید!**
+
+**ساخته شده با ❤️ توسط تیم MJA**
