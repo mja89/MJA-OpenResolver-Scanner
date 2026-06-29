@@ -12,11 +12,9 @@ from mja_scanner import MJAScanner
 
 async def main():
     """Main entry point"""
-    # Check if config exists
     if not os.path.exists('config.json'):
         print("⚠️  Config file not found! Using defaults...")
     
-    # Create scanner instance
     scanner = MJAScanner('config.json')
     
     print("=" * 70)
@@ -31,25 +29,21 @@ async def main():
     print("=" * 70)
     
     try:
-        # Start scanning tasks
-        scan_tasks = []
+        # اجرای اسکن برای هر target
         for target in scanner.config.get('targets', []):
-            scan_tasks.append(scanner.scan_network(target))
-        
-        # Run dashboard and scanning concurrently
-        await asyncio.gather(
-            scanner.display_dashboard(),
-            *scan_tasks
-        )
-        
+            if not scanner.is_running:
+                break
+            await scanner.scan_network(target)
+            
     except KeyboardInterrupt:
         scanner.safe_stop(None, None)
     except Exception as e:
         print(f"\n❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
         scanner.save_state()
     
     finally:
-        # Final save and report
         print("\n\n📊 Generating final report...")
         scanner.save_state()
         scanner.generate_report()
