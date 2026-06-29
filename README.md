@@ -63,6 +63,116 @@ python3 run.py   # یا python run.py در ویندوز
 python3 run.py
 ```
 
+## 📋 دستورات مفید
+
+### مشاهده نتایج اسکن
+
+```bash
+# مشاهده لیست Resolverهای پیدا شده
+cat client_resolvers.txt
+
+# مشاهده تعداد Resolverهای پیدا شده
+cat client_resolvers.txt | wc -l
+
+# مشاهده ۱۰ خط اول
+head -10 client_resolvers.txt
+
+# مشاهده ۱۰ خط آخر
+tail -10 client_resolvers.txt
+```
+
+### مشاهده گزارش کامل
+
+```bash
+# مشاهده گزارش CSV
+cat scan_report.csv
+
+# مشاهده با فرمت جدول (اگر column نصب باشد)
+column -t -s, scan_report.csv | less
+
+# مشاهده لاگ
+cat scan.log
+
+# مشاهده آخرین خطوط لاگ
+tail -20 scan.log
+
+# مشاهده لاگ در حال تغییر (实时)
+tail -f scan.log
+```
+
+### مشاهده وضعیت اسکن
+
+```bash
+# مشاهده وضعیت ذخیره شده
+cat state.json
+
+# مشاهده وضعیت با فرمت خوانا
+python3 -m json.tool state.json
+```
+
+### پاک کردن نتایج
+
+```bash
+# پاک کردن همه نتایج (شروع از اول)
+rm client_resolvers.txt scan_report.csv scan.log state.json
+
+# یا پاک کردن تک تک فایل‌ها
+rm client_resolvers.txt   # فقط لیست Resolverها
+rm scan_report.csv        # فقط گزارش
+rm scan.log               # فقط لاگ
+rm state.json             # فقط وضعیت (برای شروع از اول)
+```
+
+### ادامه اسکن از نقطه قبلی
+
+```bash
+# اگر state.json وجود داشته باشد، اسکن از همان نقطه ادامه می‌یابد
+python3 run.py
+```
+
+### شروع مجدد اسکن از اول
+
+```bash
+# 1. پاک کردن وضعیت
+rm state.json
+
+# 2. اجرا
+python3 run.py
+```
+
+### مشاهده فضای مصرفی
+
+```bash
+# مشاهده حجم فایل‌ها
+ls -lh client_resolvers.txt scan_report.csv scan.log state.json
+
+# مشاهده حجم کل پوشه
+du -sh .
+```
+
+### پشتیبان‌گیری از نتایج
+
+```bash
+# ایجاد پوشه برای بکاپ
+mkdir -p backup
+
+# کپی نتایج در پوشه بکاپ
+cp client_resolvers.txt backup/client_resolvers_$(date +%Y%m%d_%H%M%S).txt
+cp scan_report.csv backup/scan_report_$(date +%Y%m%d_%H%M%S).csv
+```
+
+### اجرا با تنظیمات مختلف
+
+```bash
+# اجرا با حالت Battery (مصرف کمتر)
+python3 -c "import json; c=open('config.json').read(); d=json.loads(c); d['profile']='battery'; open('config.json','w').write(json.dumps(d, indent=2))"
+python3 run.py
+
+# اجرا با حالت Turbo (سرعت بیشتر)
+python3 -c "import json; c=open('config.json').read(); d=json.loads(c); d['profile']='turbo'; open('config.json','w').write(json.dumps(d, indent=2))"
+python3 run.py
+```
+
 ## ⚙️ پیکربندی
 
 فایل `config.json` را ویرایش کنید:
@@ -185,6 +295,13 @@ chmod +x run.py install.sh
 ### برنامه هنگ کرد؟
 اجازه دهید چند دقیقه کار کند. اگر واقعاً هنگ کرد، `Ctrl+C` بزنید و دوباره اجرا کنید (ادامه می‌دهد).
 
+### خطای "unsupported operand type"
+```bash
+# پاک کردن state.json و اجرا مجدد
+rm state.json
+python3 run.py
+```
+
 ## 🛡️ نکات امنیتی
 
 - این ابزار فقط برای **تست امنیتی** و **تحقیقاتی** طراحی شده است
@@ -207,6 +324,9 @@ chmod +x run.py install.sh
 
 **س: چرا پورت در خروجی نیست؟**
 ج: چون همه رزولورها روی پورت ۵۳ هستند و نیازی به نمایش پورت نیست.
+
+**س: چگونه اسکن را متوقف کنم؟**
+ج: کلید `Ctrl+C` را بزنید، برنامه به صورت امن متوقف می‌شود و وضعیت ذخیره می‌شود.
 
 ## 🤝 مشارکت در توسعه
 
