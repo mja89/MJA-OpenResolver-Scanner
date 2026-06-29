@@ -24,7 +24,7 @@
 
 #### برای Linux / macOS / Termux:
 ```bash
-git clone https://github.com/yourusername/MJA-OpenResolver-Scanner.git
+git clone https://github.com/mja89/MJA-OpenResolver-Scanner.git
 cd MJA-OpenResolver-Scanner
 chmod +x install.sh
 ./install.sh
@@ -32,7 +32,7 @@ chmod +x install.sh
 
 #### برای Windows:
 ```cmd
-git clone https://github.com/yourusername/MJA-OpenResolver-Scanner.git
+git clone https://github.com/mja89/MJA-OpenResolver-Scanner.git
 cd MJA-OpenResolver-Scanner
 install.bat
 ```
@@ -41,7 +41,7 @@ install.bat
 
 #### مرحله ۱: کلون کردن پروژه
 ```bash
-git clone https://github.com/yourusername/MJA-OpenResolver-Scanner.git
+git clone https://github.com/mja89/MJA-OpenResolver-Scanner.git
 cd MJA-OpenResolver-Scanner
 ```
 
