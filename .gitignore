@@ -1,20 +1,44 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-logs/
-output/
-
-state.json
-
-scan.log
-
+# Project specific
 client_resolvers.txt
+scan_report.csv
+scan.log
+state.json
+*.pcap
+*.pcapng
 
-*.csv
-
+# IDE
 .vscode/
-
 .idea/
+*.swp
+*.swo
+*~
+.DS_Store
 
-.env
-
+# OS
+Thumbs.db
+desktop.ini
