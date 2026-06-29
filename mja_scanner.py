@@ -346,27 +346,32 @@ class MJAScanner:
         except Exception as e:
             logging.error(f"Error generating report: {e}")
 
-    def display_dashboard(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
-        elapsed = (datetime.now() - self.stats['start_time']).total_seconds()
-        remaining = self.calculate_remaining()
-        
-        print("=" * 70)
-        print("  🚀 MJA OpenResolver Scanner v1.0 (Socket Edition)")
-        print("=" * 70)
-        print(f"  Platform: {self.detect_platform()}")
-        print(f"  Profile: {self.config.get('profile', 'balanced').title()}")
-        print(f"  Workers: {self.current_workers}")
-        print("─" * 70)
-        print(f"  Scanned: {self.stats['scanned']:,}")
-        print(f"  Healthy: {self.stats['healthy']:,} 🟢")
-        print(f"  Dead: {self.stats['dead']:,} 🔴")
-        print("─" * 70)
-        print(f"  Speed: {self.stats['speed']:.2f} IPs/sec")
-        print(f"  Elapsed: {self.format_time(elapsed)}")
-        print(f"  Remaining: {self.format_time(remaining)}")
-        print("=" * 70)
-        print("  Press Ctrl+C to stop safely")
+    async def display_dashboard(self):
+        """Display real-time dashboard (به‌روزرسانی هر ۲ ثانیه)"""
+        while self.is_running:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            
+            elapsed = (datetime.now() - self.stats['start_time']).total_seconds()
+            remaining = self.calculate_remaining()
+            
+            print("=" * 70)
+            print("  🚀 MJA OpenResolver Scanner v1.0 (Socket Edition)")
+            print("=" * 70)
+            print(f"  Platform: {self.detect_platform()}")
+            print(f"  Profile: {self.config.get('profile', 'balanced').title()}")
+            print(f"  Workers: {self.current_workers}")
+            print("─" * 70)
+            print(f"  Scanned: {self.stats['scanned']:,}")
+            print(f"  Healthy: {self.stats['healthy']:,} 🟢")
+            print(f"  Dead: {self.stats['dead']:,} 🔴")
+            print("─" * 70)
+            print(f"  Speed: {self.stats['speed']:.2f} IPs/sec")
+            print(f"  Elapsed: {self.format_time(elapsed)}")
+            print(f"  Remaining: {self.format_time(remaining)}")
+            print("=" * 70)
+            print("  Press Ctrl+C to stop safely")
+            
+            await asyncio.sleep(2)
 
     def display_progress(self):
         progress = (self.stats['scanned'] / self.total_ips_to_scan * 100) if self.total_ips_to_scan > 0 else 0
