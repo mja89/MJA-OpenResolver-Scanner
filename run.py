@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
 """
 MJA OpenResolver Scanner - Runner
 """
@@ -69,3 +70,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\n\n👋 Goodbye!")
         sys.exit(0)
+
