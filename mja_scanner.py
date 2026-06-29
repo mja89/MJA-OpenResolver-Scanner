@@ -295,8 +295,10 @@ class MJAScanner:
 
     def update_stats(self):
         elapsed = (datetime.now() - self.stats['start_time']).total_seconds()
-        if elapsed > 0:
+        if elapsed > 0 and self.stats['scanned'] > 0:
             self.stats['speed'] = self.stats['scanned'] / elapsed
+        else:
+            self.stats['speed'] = 0
 
     def load_state(self) -> Dict:
         try:
@@ -392,6 +394,8 @@ class MJAScanner:
     def format_time(self, seconds: float) -> str:
         if seconds < 0:
             seconds = 0
+        if seconds == 0:
+            return "00:00:00"
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)
         seconds = int(seconds % 60)
@@ -400,5 +404,7 @@ class MJAScanner:
     def calculate_remaining(self) -> float:
         if self.stats['speed'] > 0:
             remaining_ips = self.total_ips_to_scan - self.stats['scanned']
+            if remaining_ips < 0:
+                return 0
             return remaining_ips / self.stats['speed']
         return 0
