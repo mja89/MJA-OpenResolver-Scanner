@@ -1,5 +1,6 @@
 @echo off
 echo 🚀 MJA OpenResolver Scanner - Installation
+
 echo ========================================
 
 :: Check Python
