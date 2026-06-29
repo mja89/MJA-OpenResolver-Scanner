@@ -6,18 +6,18 @@ echo ========================================
 python --version >nul 2>&1
 if errorlevel 1 (
     echo ❌ Python not found! Please install Python 3.7+
+    echo.
+    echo Download from: https://python.org/downloads/
     pause
     exit /b 1
 )
 
-:: Install dependencies
-echo 📦 Installing dependencies...
-pip install -r requirements.txt
+echo ✅ Python detected
 
 :: Create necessary files
 echo 📁 Creating required files...
-type nul > client_resolvers.txt
-type nul > scan.log
+type nul > client_resolvers.txt 2>nul
+type nul > scan.log 2>nul
 
 echo.
 echo ✅ Installation complete!
