@@ -1,5 +1,6 @@
 # 🚀 MJA OpenResolver Scanner
 
+
 **سریع‌ترین و هوشمندترین اسکنر Open DNS Resolver**
 
 [![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://python.org)
