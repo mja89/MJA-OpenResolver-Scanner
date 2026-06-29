@@ -1,6 +1,3 @@
-### (برای لینوکس/مک)
-
-```bash
 #!/bin/bash
 
 # MJA OpenResolver Scanner Installer
@@ -14,19 +11,7 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-python_version=$(python3 --version 2>&1 | grep -oP '\d+\.\d+')
-if [ "$(echo "$python_version < 3.7" | bc)" -eq 1 ]; then
-    echo "❌ Python 3.7+ required (found $python_version)"
-    exit 1
-fi
-
-echo "✅ Python $python_version detected"
-
-# Install pip if needed
-if ! command -v pip3 &> /dev/null; then
-    echo "Installing pip3..."
-    python3 -m ensurepip --upgrade
-fi
+echo "✅ Python detected"
 
 # Install dependencies
 echo "📦 Installing dependencies..."
