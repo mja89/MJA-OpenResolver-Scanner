@@ -29,8 +29,8 @@ logging.basicConfig(
 
 @dataclass
 class ResolverResult:
+    """Data class for resolver scan results"""
     ip: str
-    port: int = 53
     latency: float = 0.0
     loss: float = 0.0
     score: float = 0.0
@@ -72,14 +72,12 @@ class MJAScanner:
 
     def build_dns_query(self, domain: str) -> bytes:
         """ساخت پکت DNS query برای تست"""
-        # تبدیل دامنه به فرمت DNS
         parts = domain.split('.')
         query = b''
         for part in parts:
             query += bytes([len(part)]) + part.encode()
         query += b'\x00'
         
-        # ساخت هدر + query
         header = b'\xAA\xAA\x01\x00\x00\x01\x00\x00\x00\x00\x00\x00'
         return header + query + b'\x00\x01\x00\x01'
 
@@ -132,28 +130,21 @@ class MJAScanner:
         try:
             start_time = time.time()
             
-            # ایجاد socket UDP
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.settimeout(self.current_timeout)
             
             try:
-                # ارسال درخواست DNS
                 sock.sendto(self.dns_query_packet, (ip, port))
-                
-                # دریافت پاسخ
                 data, _ = sock.recvfrom(512)
                 
                 latency = (time.time() - start_time) * 1000  # ms
                 
-                # بررسی اینکه پاسخ معتبر است (حداقل 12 بایت هدر)
                 if len(data) >= 12:
-                    # بررسی کد پاسخ (بایت 3)
                     response_code = data[3] & 0x0F
-                    if response_code == 0:  # پاسخ موفق
+                    if response_code == 0:
                         score = self.calculate_score(latency, 0)
                         return ResolverResult(
                             ip=ip,
-                            port=port,
                             latency=latency,
                             loss=0,
                             score=score,
@@ -287,10 +278,13 @@ class MJAScanner:
             logging.error(f"Error scanning {network}: {e}")
 
     def add_result(self, result: ResolverResult):
+        """Add result and save to file (بدون پورت)"""
         self.results.append(result)
         self.stats['healthy'] += 1
+        
+        # Save to client_resolvers.txt immediately (فقط IP)
         with open('client_resolvers.txt', 'a') as f:
-            f.write(f"{result.ip}:{result.port}\n")
+            f.write(f"{result.ip}\n")
 
     async def scan_with_semaphore(self, semaphore: asyncio.Semaphore, ip: str):
         async with semaphore:
@@ -334,14 +328,19 @@ class MJAScanner:
         sys.exit(0)
 
     def generate_report(self):
+        """Generate CSV report (بدون پورت)"""
         try:
             with open('scan_report.csv', 'w', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(['IP', 'Port', 'Latency', 'Loss', 'Score', 'Alive', 'Timestamp'])
+                writer.writerow(['IP', 'Latency', 'Loss', 'Score', 'Alive', 'Timestamp'])
                 for result in self.results:
                     writer.writerow([
-                        result.ip, result.port, result.latency,
-                        result.loss, result.score, result.alive, result.timestamp
+                        result.ip,
+                        result.latency,
+                        result.loss,
+                        result.score,
+                        result.alive,
+                        result.timestamp
                     ])
             logging.info("Report generated: scan_report.csv")
         except Exception as e:
