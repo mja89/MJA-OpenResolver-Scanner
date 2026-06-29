@@ -407,4 +407,4 @@ class MJAScanner:
             if remaining_ips < 0:
                 return 0
             return remaining_ips / self.stats['speed']
-        return 0
+        return 0w
