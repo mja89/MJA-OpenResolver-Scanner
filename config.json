@@ -1,0 +1,32 @@
+{
+  "profile": "balanced",
+  "initial_workers": 100,
+  "min_workers": 20,
+  "max_workers": 500,
+  "initial_timeout": 3.0,
+  "min_timeout": 1.0,
+  "max_timeout": 10.0,
+  "cpu_threshold": 70,
+  "ram_limit": 80,
+  "batch_size": 1000,
+  "batch_time": 120,
+  "save_interval": 60,
+  "smart_sampling": true,
+  "random_scan": true,
+  "auto_continue": false,
+  "batch_stop": false,
+  "targets": [
+    "8.8.8.8",
+    "1.1.1.0/24",
+    "45.0.0.0/8",
+    "94.140.14.14:53"
+  ],
+  "ports": [53],
+  "dns_query": "google.com",
+  "dns_type": "A",
+  "scoring_weights": {
+    "latency": 0.5,
+    "loss": 0.3,
+    "alive": 0.2
+  }
+}
