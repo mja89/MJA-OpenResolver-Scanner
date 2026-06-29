@@ -23,7 +23,7 @@ A high-performance Open DNS Resolver Scanner for:
 
 Current Version:
 
-v0.1.0-alpha
+v0.1.0-alpha .
 
 Project Started:
 2026
